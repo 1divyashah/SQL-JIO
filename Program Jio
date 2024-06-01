@@ -1,0 +1,213 @@
+create database Jio;
+use Jio;
+
+create table Employee (
+Emp_ID int(10),
+First_Name varchar(10),
+Last_Name varchar(10),
+Dept_code int (3));
+
+select * from employee;
+
+insert into Employee (Emp_ID, First_Name, Last_Name, Dept_Code)
+values
+(248132604,"Shivam", "Deo",76),
+(815242165,"Parijat", "Shankar",43),
+(416122768,"rahul", "Srivastava", 66),
+(960828909,"Kumar","Swamy",47),
+(440361783,"Shankh","Khurana",23),
+(851591490,"Swapnil", "Mehta", 43),
+(668957687,"Arvind", "Chattejee",23),
+(585068105,"Jalpesh", "Modi",33),
+(379882096,"Kavita", "Yadav", 23),
+(718929853,"Syed", "Zaheer", 66),
+(873840890,"Sanjay", "Shukla",76),
+(941877566,"Ragini", "Malhotra",33),
+(998809976,"Javed","Khan", 23),
+(669391133, "Vikram","Singh",43),
+(861199021,"Ajay","Kumar",23),
+(980140890,"Pankaj","Verma",43),
+(750603819,"Roshan","Singh",47),
+(558885983,"Sunaina","Yadav",76),
+(392214056,"Bhavna","Sharma",66),
+(164880802,"Pooja","Kumari",47);
+
+select * from employee;
+
+
+create table Department(
+Dept_Code int (10),
+Dept_Name varchar(25),
+Dept_Budget int (12));
+
+insert into Department (Dept_Code,Dept_Name,Dept_Budget)
+values
+(23,"Sales and Marketing",50000000),
+(66,"Information Technology",100000000),
+(43,"Customer Service",30000000),
+(33, "Human Resources",20000000),
+(76, "Finance and Accounting",40000000),
+(47,"Operations",60000000);
+
+select * from Department;
+
+-- Questions:
+
+-- 1.	What are the unique Last_Names from the Employee Table?
+select distinct Last_Name  from employee;
+
+-- 2.	What is the total number of employees in the company?
+select count(*) from employee;
+
+-- 3.	What is the total budget for the company?
+select sum(Dept_Budget)from department d 
+
+-- 4.	What is the department code and budget for the "Operations" department?
+select Dept_Code, Dept_Budget, Dept_Code  
+from department
+where Dept_Name ='Operations';
+
+-- 5.	What is the total budget for the "Information Technology" and "Finance and Accounting" departments?
+select sum(Dept_Budget)
+from department d 
+where Dept_Name in ('Information Technology', 'Finance and Accounting');
+
+select * from department d 
+
+-- 6.	Who are the employees working in the "Sales and Marketing" department?
+select * from department where Dept_Name ='Sales and Marketing';  #correct
+
+SELECT * FROM Employee WHERE Dept_Code = 23;
+
+-- 7.	What is the name of the employee with Emp_ID 718929853?
+select concat(First_Name, " ", Last_Name) from employee where Emp_ID =718929853;
+
+-- 8.	What is the budget for the "Customer Service" department?
+select Dept_Budget  
+from department 
+where Dept_name ='Customer Service';
+
+-- 9.	What is the total budget for all departments except "Operations"?
+select sum(Dept_Budget) from department where Dept_Name !='Operations' ;
+
+-- 10.	What is the Emp_ID, First_Name and department_code of the employee with the last name "Shukla"?
+select * from employee where Last_Name ='Shukla' ;
+
+-- 11.	What is the average budget for the departments with Dept_Code 23 and 43?
+select avg(Dept_Budget)
+from department d 
+where Dept_Code in (23,43);
+
+-- 12.	How many employees are there whose first name starts with the letter "S"?
+select count(*)
+from employee 
+where First_Name like ('S%');
+
+-- 13.	List the name of Employees whose First_name starts with "S".
+select * from employee where First_Name like ('S%');
+
+-- 14.	List the name of Employees whose First_name starts with "S" and ends with "A".
+select * from employee where First_Name like ('S%A');
+
+-- 15.	Fetch Top 3 records of all the Departments in descending order based on the budget of the department.
+select * from department order by Dept_Budget desc limit 3;
+
+-- 16.	Fetch data of all employees from the employee table whose dept_code is an odd number
+select * from employee where mod(Dept_code,2)!=0;
+
+-- 17.	Create a clone of the table employee with a name Clone_table and having two columns, one with full name and the other with the department code with an alias D_Code
+create table Clone_table 
+select concat(First_name," ",Last_Name) as Full_name, Dept_code as D
+from employee;
+
+select * from Clone_table;
+
+-- 18.	Delete employee details of "Ajay Kumar" from Clone_Table
+delete from clone_table where full_name="Ajay Kumar";
+
+
+select * from clone_table;
+
+-- 19.	The name of the employee "rahul Srivasatava" has a lower case 'r', make changes in the clone table so that the full_name is written as "Rahul Srivastava" 
+update clone_table set Full_name="Rahul Srivastava"
+where Full_name="rahul Srivastave";
+
+
+select * from clone_table;
+
+-- 20.	Convert Full_name from clone table into uppercase.
+select upper(full_name), D from clone_table;
+
+-- 21.	Fetch second to fifth record from the department table based on the Highest Budget.
+select * from department order by Dept_Budget desc limit 2,4;   #1,4 means
+
+select * from department order by Dept_Budget desc limit 1,4;
+select * from department d 
+
+-- 22.	The employee with the name "Jalpesh Modi" has decided to move into another department, delete the D_code value corresponding to "Jalpesh_Modi" from the clone_table
+delete from clone_table where name ="Jalpesh_Modi"  #soft delete  both right   
+
+update clone_table set D_code=null where full_name="Jalpesh Modi"; #
+
+select * from clone_table;
+
+-- 23.	Change the name of the column D_Code to Department_code in clone table.
+alter table clone_table rename column D to Department_Code;
+select * from clone_table;
+
+-- 24.	Since no mathematical operation will be performed on emp_id in employee table, convert its data type from int to varchar
+alter table employee modify column emp_id varchar(20);
+select * from employee;
+select * from department;
+
+-- 25.	The Company has decided to increase the budget of all the department by 10% , make changes accordingly to fetch old and new budget
+select Dept_Code, Dept_Name, Dept_Budget as Old_budget, Dept_Budget*10/100+Dept_Budget  as new_budget
+from department 
+
+select Dept_code, Dept_name, Dept_Budget Old_Budget, Dept_budget * 1.1 as new_budget from department;
+
+-- 26.	What is the name of the department with the lowest budget?
+select * from department order by Dept_Budget asc limit 1; 
+
+SELECT Dept_Name, Dept_Budget FROM Department WHERE Dept_Budget = (SELECT MIN(Dept_Budget) FROM Department);
+#if subquery used the changes also get updated
+
+-- 27.	Who are the employees working in the departments with budgets greater than 40,000,000?
+select * from employee where Dept_code in 
+(select Dept_code from department where Dept_budget >40000000);
+
+
+select * from department d 
+
+select * from employee e 
+
+
+select e.First_Name, d.Dept_Budget, e.Emp_ID, e.Dept_code  
+from employee as e inner join department as d
+on e.Dept_code =d.Dept_Code 
+where Dept_Budget >40000000;
+
+-- 28.	What is the name of the department with the second highest budget?
+select * from department where Dept_Budget =
+(select max(Dept_Budget) from department where Dept_Budget <
+(select max(Dept_Budget) from department));
+
+-- 29.	How many employees are there in each department?
+select d.Dept_Name, count(*)
+from employee as e inner join department as d
+on e.Dept_code =d.Dept_Code 
+group by d.Dept_Name;
+
+-- 30.	Create a view of Employees working in Sales and Marketing department only.
+select e.*, d.Dept_Name 
+from employee as e join department as d
+on e.Dept_code =d.Dept_Code
+where d.Dept_Name ="Sales and Marketing"; 
+-- how to do with sub query
+
+
+
+
+
+
+
